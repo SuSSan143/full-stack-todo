@@ -71,14 +71,12 @@ export default NextAuth({
   },
   callbacks: {
     async jwt({ token, account, user }) {
-      if (user) {
-        if (account.type === "credentials") {
-          token.jwt = user.user.jwt;
-          token.id = user.user.user.id;
-          token.name = user.user.user.username;
-          token.email = user.user.user.email;
-          token.provider = user.user.user.provider;
-        }
+      if (user && account?.type === "credentials") {
+        token.jwt = user.user.jwt;
+        token.id = user.user.user.id;
+        token.name = user.user.user.username;
+        token.email = user.user.user.email;
+        token.provider = user.user.user.provider;
       }
 
       if (account) {

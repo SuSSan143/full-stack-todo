@@ -1,14 +1,14 @@
 // @ts-nocheck
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import axios from "axios";
 
 import {
   getSession,
   getCsrfToken,
   getProviders,
   signIn,
+  useSession,
 } from "next-auth/react";
 
 import {
@@ -58,13 +58,14 @@ function Button({ content, form }) {
   );
 }
 
-export default function Home({ session, csrfToken, providers }) {
+export default function Home({ csrfToken, providers }) {
   const [userInfo, setUserInfo] = useState({
     username: "",
     password: "",
     email: "",
   });
   const [autheticationType, setAutheticationType] = useState("Sign In");
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   const handleUserInfo = (event) => {
@@ -88,10 +89,16 @@ export default function Home({ session, csrfToken, providers }) {
     });
 
     if (error) {
-      return alert("On users found");
+      return alert("No users found");
     }
     router.push(url);
   };
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/user");
+    }
+  }, [status]);
 
   return (
     <>

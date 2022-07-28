@@ -140,6 +140,7 @@ export default function Todo({
     router.push(url);
   };
 
+
   return (
     <>
       <Head>
@@ -276,7 +277,7 @@ export async function getServerSideProps(context) {
   let userID;
   let isLightTheme;
 
-  if (filteredUser.data.data.length === 0 && session.provider !== "local") {
+  if (filteredUser.data.data.length === 0) {
     const data = JSON.stringify({
       data: {
         users_permissions_user: session.id,
@@ -299,6 +300,7 @@ export async function getServerSideProps(context) {
     isLightTheme = filteredUser.data.data[0].attributes.isLightTheme;
   }
 
+
   const {
     data: { data },
   } = await axios.get(
@@ -309,6 +311,7 @@ export async function getServerSideProps(context) {
       },
     }
   );
+
   const todos = data.attributes.todo;
   const username =
     data.attributes.users_permissions_user.data.attributes.username;
